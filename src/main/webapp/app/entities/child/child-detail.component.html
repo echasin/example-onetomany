@@ -1,0 +1,33 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="child">
+            <h2><span jhiTranslate="jhipsterApp.child.detail.title">Child</span> {{child.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jhipsterApp.child.name">Name</span></dt>
+                <dd>
+                    <span>{{child.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="jhipsterApp.child.parent">Parent</span></dt>
+                <dd>
+                    <div *ngIf="child.parent">
+                        <a [routerLink]="['/parent', child.parent?.id, 'view']">{{child.parent?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/child', child.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
