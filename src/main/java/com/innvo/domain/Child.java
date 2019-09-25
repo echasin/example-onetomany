@@ -27,7 +27,7 @@ public class Child implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne (cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name ="parent_id", nullable = false)
     @JsonIgnoreProperties("children")
     private Parent parent;
