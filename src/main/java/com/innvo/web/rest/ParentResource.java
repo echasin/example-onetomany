@@ -1,5 +1,6 @@
 package com.innvo.web.rest;
 
+import com.innvo.domain.Child;
 import com.innvo.domain.Parent;
 import com.innvo.repository.ParentRepository;
 import com.innvo.web.rest.errors.BadRequestAlertException;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link com.innvo.domain.Parent}.
@@ -52,6 +54,12 @@ public class ParentResource {
         if (parent.getId() != null) {
             throw new BadRequestAlertException("A new parent cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if(parent.getChildren() != null) {
+        	parent.getChildren().stream().forEach(child -> {
+        		child.setParent(parent);
+        		parent.getChildren().add(child);
+        	});
+        }
         Parent result = parentRepository.save(parent);
         return ResponseEntity.created(new URI("/api/parents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -72,6 +80,12 @@ public class ParentResource {
         log.debug("REST request to update Parent : {}", parent);
         if (parent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if(parent.getChildren() != null) {
+        	parent.getChildren().stream().forEach(child -> {
+        		child.setParent(parent);
+        		parent.getChildren().add(child);
+        	});
         }
         Parent result = parentRepository.save(parent);
         return ResponseEntity.ok()
